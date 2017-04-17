@@ -1,0 +1,41 @@
+<!--
+  Generated template for the Remind page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+        <ion-title>remind</ion-title>
+        <ion-buttons end>
+            <button (click)='addReminder()' ion-button icon-only>
+                <ion-icon name='add'></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list no-border>
+       <ion-item *ngFor="let reminder of reminders | async">
+            <ion-toggle checked="{{reminder.content.checked}}" item-left></ion-toggle>
+            <ion-label>
+                {{reminder.title}}
+            </ion-label>
+           <ion-icon name="ionic" color="{{reminder.content.color}}" item-right></ion-icon>
+        </ion-item>
+    </ion-list>
+    <ion-list>
+        <ion-list-header>
+            
+            <ion-buttons end>
+                Bewegungskalender <button (click)='addReminder()' ion-button icon-only>
+                    <ion-icon name='add'></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-list-header>
+        <ion-item>Terminator II</ion-item>
+        <ion-item>The Empire Strikes Back</ion-item>
+        <ion-item>Blade Runner</ion-item>
+    </ion-list>
+</ion-content>

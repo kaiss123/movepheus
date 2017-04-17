@@ -1,0 +1,26 @@
+<!--
+  Generated template for the Movedetail page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+      <ion-title>{{move.title}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding class="move-detail">
+
+    <div text-center>
+        <img [src]="move.content.img" [alt]="move"><br>
+    </div>
+   <!--<div text-center>
+        <iframe [src]="move.content.video" frameborder="0" allowfullscreen></iframe>
+    </div>--> 
+    <p>{{move.content.text}}</p>
+
+</ion-content>

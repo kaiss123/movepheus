@@ -1,0 +1,31 @@
+<!--
+  Generated template for the Move page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>move</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-list>
+        <ion-item *ngFor="let move of moves | async">
+            <ion-card-header>
+                <button ion-item detail-push (click)="goToMoveDetail(move)">
+                    <ion-thumbnail item-left>
+                        <img [src]="move.content.img" alt="move pic">
+                    </ion-thumbnail>
+                    {{move.title}}
+                </button>
+            </ion-card-header>
+        </ion-item>
+    </ion-list>
+
+    
+</ion-content>
