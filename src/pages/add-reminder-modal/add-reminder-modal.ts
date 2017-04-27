@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, AlertController, Platform  } from 'ionic-angular';
-import { LocalNotifications } from 'ionic-native';
 import * as moment from 'moment';
+import { RRule } from 'rrule';
 /*
   Generated class for the AddReminderModal page.
 
@@ -13,41 +13,63 @@ import * as moment from 'moment';
   templateUrl: 'add-reminder-modal.html'
 })
 export class AddReminderModalPage {
-    notifyTime: any;
-    notifications: any[] = [];
+    notifyTimeStart: any;
+    notifyTimeEnd: any;
+    byweekday: any[] = [];
     days: any[];
-    chosenHours: number;
-    chosenMinutes: number;
+    chosenHoursStart: number;
+    chosenMinutesStart: number;
+    chosenHoursEnd: number;
+    chosenMinutesEnd: number;
+    name: string = 'new Reminder';
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController, public alertCtrl: AlertController, public platform: Platform) {
-        this.notifyTime = moment(new Date()).format();
+        this.notifyTimeStart = moment(new Date()).format();
+        this.notifyTimeEnd = moment(new Date()).add(15, 'm').format();
 
-        this.chosenHours = new Date().getHours();
-        this.chosenMinutes = new Date().getMinutes();
+        this.chosenHoursStart = new Date().getHours();
+        this.chosenMinutesStart = new Date().getMinutes();
+        this.chosenHoursEnd = new Date().getHours();
+        this.chosenMinutesEnd = new Date().getMinutes();
 
         this.days = [
-            { title: 'Monday', dayCode: 1, checked: false },
-            { title: 'Tuesday', dayCode: 2, checked: false },
-            { title: 'Wednesday', dayCode: 3, checked: false },
-            { title: 'Thursday', dayCode: 4, checked: false },
-            { title: 'Friday', dayCode: 5, checked: false },
-            { title: 'Saturday', dayCode: 6, checked: false },
-            { title: 'Sunday', dayCode: 0, checked: false }
+            { title: 'Monday', dayCode: 1, checked: false , rule: RRule.MO},
+            { title: 'Tuesday', dayCode: 2, checked: false, rule: RRule.TU},
+            { title: 'Wednesday', dayCode: 3, checked: false, rule: RRule.WE},
+            { title: 'Thursday', dayCode: 4, checked: false, rule: RRule.TH},
+            { title: 'Friday', dayCode: 5, checked: false, rule: RRule.FR},
+            { title: 'Saturday', dayCode: 6, checked: false, rule: RRule.SA},
+            { title: 'Sunday', dayCode: 0, checked: false, rule: RRule.SU}
         ];
     }
+     	
 
+//new RRule({
+//    freq: RRule.MINUTELY,
+//   dtstart: new Date(2017, 3, 26, 8, 30, 0),
+//    count: 30,
+//    interval: 15,
+//    wkst: RRule.WE,
+//    byweekday: [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR],
+//    byhour: [9, 10, 11, 12, 13, 14, 15, 16]
+//})
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddReminderModalPage');
   }
 
   closeModal(): void {
-      this.viewCtrl.dismiss();
+      let data = { 'name': this.name, 'byweekday': this.byweekday, 'notifyTimeStart': this.notifyTimeStart, 'notifyTimeEnd': this.notifyTimeEnd};
+      this.viewCtrl.dismiss(data);
+      console.log('dissmiss');
   }
-    timeChange(time) {
-        this.chosenHours = time.hour.value;
-        this.chosenMinutes = time.minute.value;
-    }
-
+  timeChangeStart(time) {
+      this.chosenHoursStart = time.hour.value;
+      this.chosenMinutesStart = time.minute.value;
+  }
+  timeChangeEnd(time) {
+      this.chosenHoursEnd = time.hour.value;
+      this.chosenMinutesEnd = time.minute.value;
+  }
     addNotifications() {
 
         let currentDate = new Date();
@@ -56,6 +78,7 @@ export class AddReminderModalPage {
         for (let day of this.days) {
 
             if (day.checked) {
+                this.byweekday.push(day.rule);
 
                 let firstNotificationTime = new Date();
                 let dayDifference = day.dayCode - currentDay;
@@ -65,58 +88,14 @@ export class AddReminderModalPage {
                 }
 
                 firstNotificationTime.setHours(firstNotificationTime.getHours() + (24 * (dayDifference)));
-                firstNotificationTime.setHours(this.chosenHours);
-                firstNotificationTime.setMinutes(this.chosenMinutes);
-
-                let notification = {
-                    id: day.dayCode,
-                    title: 'Hey!',
-                    text: 'You just got notified :)',
-                    at: firstNotificationTime,
-                    every: 'week'
-                };
-
-                this.notifications.push(notification);
+                firstNotificationTime.setHours(this.chosenHoursStart);
+                firstNotificationTime.setMinutes(this.chosenMinutesStart);
 
             }
 
         }
 
-        console.log("Notifications to be scheduled: ", this.notifications);
-
-        if (this.platform.is('cordova')) {
-
-            // Cancel any existing notifications
-            LocalNotifications.cancelAll().then(() => {
-
-                // Schedule the new notifications
-                LocalNotifications.schedule(this.notifications);
-
-                this.notifications = [];
-
-                let alert = this.alertCtrl.create({
-                    title: 'Notifications set',
-                    buttons: ['Ok']
-                });
-
-                alert.present();
-
-            });
-
-        }
-
+        this.closeModal();
     }
 
-   cancelAll() {
-
-        LocalNotifications.cancelAll();
-
-        let alert = this.alertCtrl.create({
-            title: 'Notifications cancelled',
-            buttons: ['Ok']
-        });
-
-        alert.present();
-
-    }
 }
