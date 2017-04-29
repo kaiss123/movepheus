@@ -18,7 +18,7 @@
 <ion-content padding>
     <ion-list no-border>
        <ion-item *ngFor="let reminder of reminders | async">
-            <ion-toggle checked="{{reminder.content.checked}}" item-left></ion-toggle>
+            <ion-toggle checked="{{reminder.content.active}}" [(ngModel)]="reminder.content.active" (ionChange)="reminderCheckboxUpdate(reminder)" item-left></ion-toggle>
             <ion-label>
                 {{reminder.title}}
             </ion-label>

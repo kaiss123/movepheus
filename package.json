@@ -46,9 +46,5 @@
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [],
-  "-vs-binding": {
-    "ProjectOpened": [
-      "watch"
-    ]
-  }
+  "-vs-binding":{"ProjectOpened":["watch"]}
 }

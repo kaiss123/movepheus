@@ -15,7 +15,7 @@ import { RRule } from 'rrule';
 export class AddReminderModalPage {
     notifyTimeStart: any;
     notifyTimeEnd: any;
-    byweekday: any[] = [];
+    byweekday: any[];
     days: any[];
     chosenHoursStart: number;
     chosenMinutesStart: number;
@@ -33,13 +33,13 @@ export class AddReminderModalPage {
         this.chosenMinutesEnd = new Date().getMinutes();
 
         this.days = [
-            { title: 'Monday', dayCode: 1, checked: false , rule: RRule.MO},
-            { title: 'Tuesday', dayCode: 2, checked: false, rule: RRule.TU},
-            { title: 'Wednesday', dayCode: 3, checked: false, rule: RRule.WE},
-            { title: 'Thursday', dayCode: 4, checked: false, rule: RRule.TH},
-            { title: 'Friday', dayCode: 5, checked: false, rule: RRule.FR},
-            { title: 'Saturday', dayCode: 6, checked: false, rule: RRule.SA},
-            { title: 'Sunday', dayCode: 0, checked: false, rule: RRule.SU}
+            { title: 'Monday', dayCode: 1, checked: false , rule: 1},
+            { title: 'Tuesday', dayCode: 2, checked: false, rule: 2},
+            { title: 'Wednesday', dayCode: 3, checked: false, rule: 3},
+            { title: 'Thursday', dayCode: 4, checked: false, rule: 4},
+            { title: 'Friday', dayCode: 5, checked: false, rule: 5},
+            { title: 'Saturday', dayCode: 6, checked: false, rule: 6},
+            { title: 'Sunday', dayCode: 0, checked: false, rule: 7}
         ];
     }
      	
@@ -57,10 +57,18 @@ export class AddReminderModalPage {
     console.log('ionViewDidLoad AddReminderModalPage');
   }
 
-  closeModal(): void {
-      let data = { 'name': this.name, 'byweekday': this.byweekday, 'notifyTimeStart': this.notifyTimeStart, 'notifyTimeEnd': this.notifyTimeEnd};
-      this.viewCtrl.dismiss(data);
-      console.log('dissmiss');
+  closeModal(hasdata): void {
+      let data = {
+          'name': this.name,
+          'byweekday': this.byweekday,
+          'notifyTimeStart': this.notifyTimeStart,
+          'notifyTimeEnd': this.notifyTimeEnd
+      };
+      if (hasdata) {
+          this.viewCtrl.dismiss(data);
+      } else {
+          this.viewCtrl.dismiss();
+      }
   }
   timeChangeStart(time) {
       this.chosenHoursStart = time.hour.value;
@@ -75,6 +83,7 @@ export class AddReminderModalPage {
         let currentDate = new Date();
         let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
 
+        this.byweekday = [];
         for (let day of this.days) {
 
             if (day.checked) {
@@ -95,7 +104,7 @@ export class AddReminderModalPage {
 
         }
 
-        this.closeModal();
+        this.closeModal(true);
     }
 
 }

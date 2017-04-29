@@ -8,7 +8,7 @@
 <ion-content>
     <ion-toolbar>
         <ion-buttons start>
-            <button (click)="closeModal()" ion-button ion-icon>
+            <button (click)="closeModal(false)" ion-button ion-icon>
                 <ion-icon name="close"></ion-icon>
             </button>
         </ion-buttons>
@@ -45,6 +45,6 @@
 <ion-footer>
 
     <button (click)="addNotifications()" ion-button color="primary" full>Save</button>
-    <button (click)="closeModal()" ion-button color="danger" full>Close</button>
+    <button (click)="closeModal(false)" ion-button color="danger" full>Close</button>
 
 </ion-footer>
