@@ -13,9 +13,11 @@ import { MovedetailPage } from '../pages/movedetail/movedetail';
 import { EvaluatePage } from '../pages/evaluate/evaluate';
 import { EducatePage } from '../pages/educate/educate';
 import { AddReminderModalPage } from '../pages/add-reminder-modal/add-reminder-modal';
+import { AddMoveEventModalPage } from '../pages/add-move-event-modal/add-move-event-modal';
 
 // Importing Providers
 import { AuthData } from '../providers/auth-data';
+import { LocalNotifications } from 'ionic-native';
 
 // Importing AF2 Module
 
@@ -48,7 +50,8 @@ const myFirebaseAuthConfig = {
         MovedetailPage,
         EvaluatePage,
         EducatePage,
-        AddReminderModalPage
+        AddReminderModalPage,
+        AddMoveEventModalPage
     ],
     imports: [
         IonicModule.forRoot(MyApp),
@@ -66,11 +69,13 @@ const myFirebaseAuthConfig = {
         MovedetailPage,
         EvaluatePage,
         EducatePage,
-        AddReminderModalPage
+        AddReminderModalPage,
+        AddMoveEventModalPage
     ],
     providers: [
         { provide: ErrorHandler, useClass: IonicErrorHandler },
-        AuthData
+        AuthData,
+        LocalNotifications
     ]
 })
 export class AppModule { }

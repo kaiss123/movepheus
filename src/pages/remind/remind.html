@@ -19,23 +19,25 @@
     <ion-list no-border>
        <ion-item *ngFor="let reminder of reminders | async">
             <ion-toggle checked="{{reminder.content.active}}" [(ngModel)]="reminder.content.active" (ionChange)="reminderCheckboxUpdate(reminder)" item-left></ion-toggle>
-            <ion-label>
+            <ion-label (click)="openReminderDetail(reminder)">
                 {{reminder.title}}
             </ion-label>
-           <ion-icon name="ionic" color="{{reminder.content.color}}" item-right></ion-icon>
+           <ion-icon name="ionic" [ngStyle]="{'color':reminder.content.color}" color="{{reminder.content.color}}" item-right></ion-icon>
         </ion-item>
     </ion-list>
     <ion-list>
         <ion-list-header>
             
             <ion-buttons end>
-                Bewegungskalender <button (click)='addReminder()' ion-button icon-only>
+                Bewegungskalender <button (click)='addMoveEvent()' ion-button icon-only>
                     <ion-icon name='add'></ion-icon>
                 </button>
             </ion-buttons>
         </ion-list-header>
-        <ion-item>Terminator II</ion-item>
-        <ion-item>The Empire Strikes Back</ion-item>
-        <ion-item>Blade Runner</ion-item>
-    </ion-list>
+        <ion-item *ngFor="let date of dates">
+            <!--<ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="date.date"></ion-datetime>-->
+            <ion-icon name="ionic" color="{{date.color}}" [ngStyle]="{'color':date.color}" item-left></ion-icon>
+            {{formatDateTime(date.date)}} | {{date.title}} (alle {{date.interval}} min)
+        </ion-item>
+</ion-list>
 </ion-content>

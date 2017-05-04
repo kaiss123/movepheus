@@ -16,6 +16,7 @@ export class AddReminderModalPage {
     notifyTimeStart: any;
     notifyTimeEnd: any;
     byweekday: any[];
+    byhours: any[];
     days: any[];
     chosenHoursStart: number;
     chosenMinutesStart: number;
@@ -23,9 +24,11 @@ export class AddReminderModalPage {
     chosenMinutesEnd: number;
     name: string = 'new Reminder';
 
+
     constructor(public navCtrl: NavController, public navParams: NavParams, private viewCtrl: ViewController, public alertCtrl: AlertController, public platform: Platform) {
+        moment.locale('de');
         this.notifyTimeStart = moment(new Date()).format();
-        this.notifyTimeEnd = moment(new Date()).add(15, 'm').format();
+        this.notifyTimeEnd = moment(new Date()).format();
 
         this.chosenHoursStart = new Date().getHours();
         this.chosenMinutesStart = new Date().getMinutes();
@@ -62,7 +65,8 @@ export class AddReminderModalPage {
           'name': this.name,
           'byweekday': this.byweekday,
           'notifyTimeStart': this.notifyTimeStart,
-          'notifyTimeEnd': this.notifyTimeEnd
+          'notifyTimeEnd': this.notifyTimeEnd,
+          'byhours': this.byhours
       };
       if (hasdata) {
           this.viewCtrl.dismiss(data);
@@ -84,26 +88,23 @@ export class AddReminderModalPage {
         let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
 
         this.byweekday = [];
+        this.byhours = [];
         for (let day of this.days) {
 
             if (day.checked) {
                 this.byweekday.push(day.rule);
-
-                let firstNotificationTime = new Date();
-                let dayDifference = day.dayCode - currentDay;
-
-                if (dayDifference < 0) {
-                    dayDifference = dayDifference + 7; // for cases where the day is in the following week
-                }
-
-                firstNotificationTime.setHours(firstNotificationTime.getHours() + (24 * (dayDifference)));
-                firstNotificationTime.setHours(this.chosenHoursStart);
-                firstNotificationTime.setMinutes(this.chosenMinutesStart);
-
             }
-
         }
-
+        var start = new Date(this.notifyTimeStart);
+        var end = new Date(this.notifyTimeEnd);
+        while (start < end) {
+            console.log('start ',start);
+            console.log('end ',end);
+            this.byhours.push(start.getHours());
+            var newDate = start.setHours(start.getHours() + 1);
+            start = new Date(newDate);
+        }
+        console.log(this.byhours);
         this.closeModal(true);
     }
 
