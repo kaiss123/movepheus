@@ -16,14 +16,11 @@
 <ion-content padding>
     <ion-list>
         <ion-item *ngFor="let move of moves | async">
-            <ion-card-header>
-                <button ion-item detail-push (click)="goToMoveDetail(move)">
-                    <ion-thumbnail item-left>
-                        <img [src]="move.content.img" alt="move pic">
-                    </ion-thumbnail>
-                    {{move.title}}
-                </button>
-            </ion-card-header>
+                <ion-thumbnail item-left>
+                    <img [src]="move.content.img">
+                </ion-thumbnail>
+                <h2>{{move.title}}</h2>
+                <button ion-button clear item-right (click)="goToMoveDetail(move)">View</button>
         </ion-item>
     </ion-list>
 

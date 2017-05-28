@@ -14,6 +14,16 @@ import { EvaluatePage } from '../pages/evaluate/evaluate';
 import { EducatePage } from '../pages/educate/educate';
 import { AddReminderModalPage } from '../pages/add-reminder-modal/add-reminder-modal';
 import { AddMoveEventModalPage } from '../pages/add-move-event-modal/add-move-event-modal';
+import { ListMoveEventsModalPage } from '../pages/list-move-events-modal/list-move-events-modal';
+
+//Menu Items
+import { AboPage } from '../pages/abo/abo';
+import { SeminarPage } from '../pages/seminar/seminar';
+import { SettingsPage } from '../pages/settings/settings';
+import { FaqPage } from '../pages/faq/faq';
+import { TourPage } from '../pages/tour/tour';
+import { ContactPage } from '../pages/contact/contact';
+import { AgbPage } from '../pages/agb/agb';
 
 // Importing Providers
 import { AuthData } from '../providers/auth-data';
@@ -51,7 +61,15 @@ const myFirebaseAuthConfig = {
         EvaluatePage,
         EducatePage,
         AddReminderModalPage,
-        AddMoveEventModalPage
+        AddMoveEventModalPage,
+        ListMoveEventsModalPage,
+        AboPage,
+        SeminarPage,
+        SettingsPage,
+        FaqPage,
+        TourPage,
+        ContactPage,
+        AgbPage
     ],
     imports: [
         IonicModule.forRoot(MyApp),
@@ -70,7 +88,15 @@ const myFirebaseAuthConfig = {
         EvaluatePage,
         EducatePage,
         AddReminderModalPage,
-        AddMoveEventModalPage
+        AddMoveEventModalPage,
+        ListMoveEventsModalPage,
+        AboPage,
+        SeminarPage,
+        SettingsPage,
+        FaqPage,
+        TourPage,
+        ContactPage,
+        AgbPage
     ],
     providers: [
         { provide: ErrorHandler, useClass: IonicErrorHandler },

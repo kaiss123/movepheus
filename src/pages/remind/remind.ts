@@ -3,6 +3,7 @@ import { NavController, Platform, NavParams, ModalController, AlertController, A
 import { AngularFire, FirebaseListObservable, AngularFireAuth, FirebaseAuthState } from 'angularfire2';
 import { AddReminderModalPage } from '../add-reminder-modal/add-reminder-modal';
 import { AddMoveEventModalPage } from '../add-move-event-modal/add-move-event-modal';
+import { ListMoveEventsModalPage } from '../list-move-events-modal/list-move-events-modal';
 import { RRule, RRuleSet } from 'rrule';
 import { LocalNotifications } from 'ionic-native';
 import * as moment from 'moment';
@@ -23,7 +24,9 @@ export class RemindPage {
    dates: any[] = [];
    userid: any;
    notifications: any[] = [];
-
+   notificationIndex: number = 0;
+   days: any[];
+   hiddenFields = true;
    constructor(public navCtrl: NavController, public navParams: NavParams, public af: AngularFire, public modalCtrl: ModalController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, public localNotifications: LocalNotifications, public platform: Platform) {
        af.auth.subscribe(user => {
            if (user) {
@@ -31,15 +34,19 @@ export class RemindPage {
                console.log(user);
            }
        });
+       LocalNotifications.hasPermission();
        this.reminders = af.database.list('/reminders/' + this.userid);
        this.moves = af.database.list('/moves');
        this.moveEvents = af.database.list('/moveEvents/' + this.userid);
-
+       console.log('reminders: ');
+       console.dir(this.reminders);
        af.database.list('/moveEvents/' + this.userid)
-           .subscribe(me =>
+           .subscribe(me => {
+               this.reset();
                me.forEach(item => {
-                this.handleMoveEvents(item);
-           }));
+                   this.handleMoveEvents(item);
+               })
+           });
       //         me.forEach(item => {
       //             af.database.list('/moves/' + Object.keys(item.move)[0]).subscribe(m =>
       //                 item.move = m);
@@ -50,28 +57,29 @@ export class RemindPage {
       //         }));
 
        //console.dir(this.moveEvents);
-   }
-    /**
-    RRule.YEARLY = 0
-    RRule.MONTHLY = 1
-    RRule.WEEKLY = 2
-    RRule.DAILY = 3
-    RRule.HOURLY = 4
-    RRule.MINUTELY = 5
-    RRule.SECONDLY = 6
 
-    RRule.Mo = 0
-    RRule.TU = 1
-    RRule.WE = 2
-    RRule.TH = 3
-    RRule.FR = 4
-    RRule.SA = 5
-    RRule.SU = 6
-    **/
+   }
+   reset() {
+       this.days = [
+           { title: 'Monday', dayCode: 1, checked: false, reminders: [] },
+           { title: 'Tuesday', dayCode: 2, checked: false, reminders: [] },
+           { title: 'Wednesday', dayCode: 3, checked: false, reminders: [] },
+           { title: 'Thursday', dayCode: 4, checked: false, reminders: [] },
+           { title: 'Friday', dayCode: 5, checked: false, reminders: [] },
+           { title: 'Saturday', dayCode: 6, checked: false, reminders: [] },
+           { title: 'Sunday', dayCode: 7, checked: false, reminders: [] }
+       ];
+       this.dates = [];
+   }
    handleMoveEvents(moveEvent) {
        console.log("MoveEventList init");
        console.dir(moveEvent);
-
+       moveEvent.byweekday.forEach(function (data, i) {
+           console.log(data);
+           console.log(this.days);
+            this.days[data - 1].reminders.push(moveEvent);
+        },this);
+        console.dir(this.days);
 
         let rule = new RRule({
             freq: moveEvent.freq,
@@ -79,11 +87,11 @@ export class RemindPage {
             interval: moveEvent.interval,
             byweekday: moveEvent.byweekday,
             byhour: moveEvent.byhours
-       });
+        });
         var rruleSet = new RRuleSet();
         rruleSet.rrule(rule);
         rruleSet.all().forEach(function (date) {
-            this.dates.push({ date: date, active: moveEvent.active, color: moveEvent.color, icon: moveEvent.icon, title: moveEvent.title, remindername: moveEvent.remindername, interval:moveEvent.interval });
+            this.dates.push({ date: date, active: moveEvent.active, byweekday: moveEvent.byweekday, color: moveEvent.color, icon: moveEvent.icon, title: moveEvent.title, remindername: moveEvent.remindername, interval: moveEvent.interval });
         }, this);
         this.dates.sort(function (a, b) {
             return new Date(a.date).getTime() - new Date(b.date).getTime() 
@@ -91,26 +99,28 @@ export class RemindPage {
         this.handleNotifications(this.dates);
 
    }
+    
    handleNotifications(dates) {
        console.log("handleNotifications");
-       var index = 1;
-       dates.forEach(function (data) {
+       console.dir(dates);
+       dates.forEach(function (data, i) {
            let notification = {
-               title: 'Hey!',
-               text: 'You just got notified :)',
+               id: this.notificationIndex,
+               title: data.title,
+               text: data.date,
                at: data.date
            };
            this.notifications.push(notification);
-           index++;
+           this.notificationIndex = this.notificationIndex + 1;
        }, this);
        console.log("Notifications to be scheduled: ", this.notifications);
+       console.log("alle sheduled");
+       console.log(LocalNotifications.getAllScheduled());
        if (this.platform.is('cordova')) {
-          // LocalNotifications.cancelAll().then(() => {
-               // Schedule the new notifications
+           LocalNotifications.cancelAll().then(() => {
                LocalNotifications.schedule(this.notifications);
                this.notifications = [];
-               alert("notification added");
-           //});
+           });
        }
    }
    formatDateTime(date: Date): string {
@@ -118,7 +128,7 @@ export class RemindPage {
            return '';
        }
 
-       return moment(date).format('HH:mm');
+       return moment(date).format('H:mm');
    }
   ionViewDidLoad() {
       console.log('ionViewDidLoad RemindPage');
@@ -213,7 +223,7 @@ export class RemindPage {
                   notifytimestart: data.reminder.rule.notifyTimeStart,
                   notifytimeend: data.reminder.rule.notifyTimeEnd,
                   freq: RRule.MINUTELY,
-                  count: 10
+                  count: 1
 
               });
           }
@@ -221,5 +231,12 @@ export class RemindPage {
       });
       modal.present();
   }
+  listMoveEvents() {
+      const modal = this.modalCtrl.create(ListMoveEventsModalPage, { dates: this.dates });
 
+      console.log("send this");
+      console.dir(this.dates);
+      modal.present();
+
+  }
 }

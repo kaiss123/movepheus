@@ -1,17 +1,41 @@
-<ion-menu [content]="content">
-    <ion-header>
-        <ion-toolbar>
-            <ion-title>Menu</ion-title>
-        </ion-toolbar>
-    </ion-header>
+
+<ion-menu [content]="content" >
 
     <ion-content>
-        <ion-list>
 
+        <img src="assets/img/dreamhouse-logo.svg" class="menu-logo" />
+
+        <ion-list>
+            <ion-list-header>
+                movepheus
+            </ion-list-header>
+            <button menuClose ion-item *ngFor="let menuItem of movepheusMenu" (click)="openPage(menuItem)">
+                <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+                {{menuItem.title}}
+            </button>
         </ion-list>
+
+        <ion-list>
+            <ion-list-header>
+                Hilfe
+            </ion-list-header>
+            <button menuClose ion-item *ngFor="let menuItem of helpMenu" (click)="openPage(menuItem)">
+                <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+                {{menuItem.title}}
+            </button>
+        </ion-list>
+
+        <ion-list>
+            <ion-list-header>
+                Allgemein
+            </ion-list-header>
+            <button menuClose ion-item *ngFor="let menuItem of infoMenu" (click)="openPage(menuItem)">
+                <ion-icon item-left [name]="menuItem.icon"></ion-icon>
+                {{menuItem.title}}
+            </button>
+        </ion-list>
+
     </ion-content>
 
 </ion-menu>
-
-<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

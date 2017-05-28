@@ -15,13 +15,9 @@ import { RRule } from 'rrule';
 export class AddReminderModalPage {
     notifyTimeStart: any;
     notifyTimeEnd: any;
-    byweekday: any[];
-    byhours: any[];
+    byweekday: any[] = [];
+    byhours: any[] = [];
     days: any[];
-    chosenHoursStart: number;
-    chosenMinutesStart: number;
-    chosenHoursEnd: number;
-    chosenMinutesEnd: number;
     name: string = 'new Reminder';
 
 
@@ -30,11 +26,6 @@ export class AddReminderModalPage {
         this.notifyTimeStart = moment(new Date()).format();
         this.notifyTimeEnd = moment(new Date()).format();
 
-        this.chosenHoursStart = new Date().getHours();
-        this.chosenMinutesStart = new Date().getMinutes();
-        this.chosenHoursEnd = new Date().getHours();
-        this.chosenMinutesEnd = new Date().getMinutes();
-
         this.days = [
             { title: 'Monday', dayCode: 1, checked: false , rule: 1},
             { title: 'Tuesday', dayCode: 2, checked: false, rule: 2},
@@ -42,7 +33,7 @@ export class AddReminderModalPage {
             { title: 'Thursday', dayCode: 4, checked: false, rule: 4},
             { title: 'Friday', dayCode: 5, checked: false, rule: 5},
             { title: 'Saturday', dayCode: 6, checked: false, rule: 6},
-            { title: 'Sunday', dayCode: 0, checked: false, rule: 7}
+            { title: 'Sunday', dayCode: 7, checked: false, rule: 7}
         ];
     }
      	
@@ -73,14 +64,6 @@ export class AddReminderModalPage {
       } else {
           this.viewCtrl.dismiss();
       }
-  }
-  timeChangeStart(time) {
-      this.chosenHoursStart = time.hour.value;
-      this.chosenMinutesStart = time.minute.value;
-  }
-  timeChangeEnd(time) {
-      this.chosenHoursEnd = time.hour.value;
-      this.chosenMinutesEnd = time.minute.value;
   }
     addNotifications() {
 
