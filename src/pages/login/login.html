@@ -11,9 +11,9 @@
 
     <ion-item>
       <ion-label stacked>Email</ion-label>
-      <ion-input #email formControlName="email" type="email" (change)="elementChanged(email)"
-        placeholder="Your email address"
-        [class.invalid]="!loginForm.controls.email.valid &&
+        <ion-input #email formControlName="email" type="email"
+                   placeholder="Your email address" value="kaiss@gmx.de"
+                   [class.invalid]="!loginForm.controls.email.valid &&
           loginForm.controls.email.dirty"></ion-input>
     </ion-item>
     <ion-item class="error-message" *ngIf="!loginForm.controls.email.valid  &&
@@ -24,9 +24,8 @@
     <ion-item>
       <ion-label stacked>Password</ion-label>
       <ion-input #password formControlName="password" type="password"
-        (change)="elementChanged(password)"
-        placeholder="Your password"
-        [class.invalid]="!loginForm.controls.password.valid &&
+                 placeholder="Your password" value="baldur123"
+                 [class.invalid]="!loginForm.controls.password.valid &&
           loginForm.controls.password.dirty"></ion-input>
     </ion-item>
     <ion-item class="error-message" *ngIf="!loginForm.controls.password.valid  &&
@@ -34,7 +33,7 @@
       <p>Your password needs more than 6 characters.</p>
     </ion-item>
 
-    <button ion-button block type="submit">
+      <button ion-button block type="submit" (click)="loginUser()">
       Login
     </button>
 

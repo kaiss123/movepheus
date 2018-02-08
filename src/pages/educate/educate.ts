@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { AngularFire } from 'angularfire2';
+import {Component} from '@angular/core';
+import {NavController, NavParams} from 'ionic-angular';
 
-import { LoginPage } from '../login/login';
+import {LoginPage} from '../login/login';
+import {AngularFireAuth} from "angularfire2/auth";
+
 /*
   Generated class for the Educate page.
 
@@ -15,7 +16,8 @@ import { LoginPage } from '../login/login';
 })
 export class EducatePage {
     af: any;
-    constructor(public navCtrl: NavController, public navParams: NavParams, af: AngularFire) {
+
+    constructor(public navCtrl: NavController, public navParams: NavParams, af: AngularFireAuth) {
         this.af = af;
         this.logoutUser();
 
@@ -25,7 +27,8 @@ export class EducatePage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad EducatePage');
   }
-    logoutUser(): firebase.Promise<any> {
-        return this.af.auth.logout();
+
+    logoutUser(): Promise<any> {
+        return this.af.auth.signOut();
     }
 }

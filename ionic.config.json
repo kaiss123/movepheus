@@ -1,6 +1,8 @@
 {
   "name": "$safeappid$",
   "app_id": "73eadb62",
-  "v2": true,
-  "typescript": true
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
 }

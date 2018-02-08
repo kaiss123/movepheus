@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import {Component} from '@angular/core';
+import {NavController, NavParams} from 'ionic-angular';
 
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
-import { MovedetailPage } from '../../pages/movedetail/movedetail';
+import {MovedetailPage} from '../../pages/movedetail/movedetail';
+import {AngularFireDatabase} from "angularfire2/database";
+
 /*
   Generated class for the Move page.
 
@@ -16,9 +17,10 @@ import { MovedetailPage } from '../../pages/movedetail/movedetail';
 })
 export class MovePage {
 
-    moves: FirebaseListObservable<any>;
-    constructor(public navCtrl: NavController, public navParams: NavParams, af: AngularFire) {
-        this.moves = af.database.list('/moves');
+    moves: any;
+
+    constructor(public navCtrl: NavController, public navParams: NavParams, af: AngularFireDatabase) {
+        this.moves = af.list('moves').valueChanges();
     }
 
   ionViewDidLoad() {
